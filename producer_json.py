@@ -4,11 +4,9 @@ import time
 from kafka import KafkaProducer
 from sensor_utils import generate_measurement
 
-# ⚠️ CAMBIA ESTO POR TU CARNÉ
-TOPIC = "2020xxxx"  # por ejemplo "20201234"
+TOPIC = "2020221441"
 
-# Servidor de Kafka proporcionado en el laboratorio
-BOOTSTRAP_SERVERS = ["lab9.alumchat.lol:9092"]
+BOOTSTRAP_SERVERS = ["iot.redesuvg.cloud:9092"]
 
 
 def main():

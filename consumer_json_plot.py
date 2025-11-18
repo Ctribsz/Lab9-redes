@@ -3,38 +3,41 @@ from kafka import KafkaConsumer
 import matplotlib.pyplot as plt
 from sensor_utils import WIND_DIRECTIONS
 
-# ⚠️ CAMBIA ESTO POR TU CARNÉ (igual que en el producer)
-TOPIC = "2020xxxx"
+TOPIC = "2020221441"
 
-# Servidor de Kafka proporcionado en el laboratorio
-BOOTSTRAP_SERVERS = ["lab9.alumchat.lol:9092"]
+BOOTSTRAP_SERVERS = ["iot.redesuvg.cloud:9092"]
 
 
 def main():
+    # Quita el value_deserializer del constructor
     consumer = KafkaConsumer(
         TOPIC,
         bootstrap_servers=BOOTSTRAP_SERVERS,
-        auto_offset_reset="earliest",  # para ver datos históricos también
+        auto_offset_reset="earliest",
         enable_auto_commit=True,
         group_id="grupo_estacion_json",
-        value_deserializer=lambda v: json.loads(v.decode("utf-8")),
+        # QUITA ESTA LÍNEA: value_deserializer=lambda v: json.loads(v.decode("utf-8")),
     )
 
     print(f"Consumer JSON escuchando el topic {TOPIC}... Ctrl+C para detener.\n")
 
-    # Listas para ir acumulando datos
     all_temp = []
     all_hume = []
     all_wind = []
 
-    # Preparar figura
     plt.ion()
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
 
     while True:
         try:
             for msg in consumer:
-                payload = msg.value  # dict con temperatura, humedad, direccion_viento
+                # Intentar deserializar manualmente
+                try:
+                    payload = json.loads(msg.value.decode("utf-8"))
+                except (UnicodeDecodeError, json.JSONDecodeError) as e:
+                    print(f"Ignorando mensaje no-JSON en offset {msg.offset} (probablemente compacto)")
+                    continue
+                
                 temp = payload["temperatura"]
                 hum = payload["humedad"]
                 wind = payload["direccion_viento"]
@@ -65,7 +68,7 @@ def main():
                 ax2.set_title("Humedad vs muestras")
                 ax2.grid(True)
 
-                # Dirección del viento (codificada como entero)
+                # Dirección del viento
                 ax3.clear()
                 wind_codes = [WIND_DIRECTIONS.index(w) for w in all_wind]
                 ax3.step(x, wind_codes, where="mid")
@@ -87,7 +90,6 @@ def main():
     plt.show()
     consumer.close()
     print("Consumer cerrado.")
-
 
 if __name__ == "__main__":
     main()

@@ -2,12 +2,9 @@ from kafka import KafkaConsumer
 import matplotlib.pyplot as plt
 from sensor_utils import decode_bytes_to_measurement, WIND_DIRECTIONS
 
-# ⚠️ CAMBIA ESTO POR TU CARNÉ
-TOPIC = "2020xxxx"
+TOPIC = "2020221441_compacto" 
 
-# Servidor de Kafka proporcionado en el laboratorio
-BOOTSTRAP_SERVERS = ["lab9.alumchat.lol:9092"]
-
+BOOTSTRAP_SERVERS = ["iot.redesuvg.cloud:9092"]
 
 def main():
     consumer = KafkaConsumer(
