@@ -60,7 +60,7 @@ BOOTSTRAP_SERVERS = ["lab9.alumchat.lol:9092"]
    por tu número de carné, por ejemplo:
 
    ```python
-   TOPIC = "20201234"
+   TOPIC = "2020221441" # Carnet de Christian Echeverría
    ```
 
    Cada pareja debe usar un topic único (el carné de alguno de los integrantes).
@@ -78,44 +78,3 @@ BOOTSTRAP_SERVERS = ["lab9.alumchat.lol:9092"]
    ```bash
    python consumer_json_plot.py
    ```
-
-Verás en consola los mensajes enviados/recibidos y una ventana con gráficas de:
-- Temperatura vs muestras
-- Humedad vs muestras
-- Dirección del viento vs muestras
-
-Toma capturas de:
-- Consola del producer
-- Consola del consumer
-- Gráfica
-
-para tu reporte.
-
-## Ejecución (versión compacta, payload de 3 bytes)
-
-1. En una terminal:
-
-   ```bash
-   python producer_compacto.py
-   ```
-
-2. En otra terminal:
-
-   ```bash
-   python consumer_compacto_plot.py`
-   ```
-
-En esta versión, el producer envía solo 3 bytes por mensaje y el consumer los decodifica
-de regreso a temperatura, humedad y dirección del viento usando `sensor_utils.py`.
-
-También deberás tomar capturas de:
-- Consola del producer compacto (se ven los bytes en hex)
-- Consola del consumer compacto
-- Gráfica de la versión compacta
-
-## Notas para el informe
-
-- Explica cómo se generan los datos (distribuciones, rangos, etc.).
-- Describe la arquitectura: Producer → Kafka (Edge) → Consumer + gráfica.
-- Justifica el diseño del payload de 24 bits (14 bits temp, 7 bits humedad, 3 bits viento).
-- Incluye las respuestas teóricas que pide el enunciado.
